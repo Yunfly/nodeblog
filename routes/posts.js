@@ -9,7 +9,7 @@ router.get('/add', function(req, res, next) {
 	categories.find({}, {}, function(err, categories) {
 		res.render('addpost', {
 			"title": "Add Post",
-			"categories":categories
+			"categories": categories
 		});
 	});
 });
@@ -21,16 +21,16 @@ router.post('/add', function(req, res, next) {
 	var author = req.body.author;
 	var date = new Date();
 
-	if (req.files.mainimage) {
-		var mainimageOriginalName = req.files.mainimage.originalname;
-		var mainImageName = req.files.mainimage.name;
-		var mainImageMine = req.files.mainimage.mimetype;
-		var mainImagePath = req.files.mainimage.path;
-		var mainImageExt = req.files.mainimage.extension;
-		var mainImageSize = req.files.mainimage.size;
-	} else {
-		var mainImageName = 'noimage.png'
-	}
+	if(req.file.mainimage){
+        var mainImageOriginalName   = req.file.mainimage.originalname;
+        var mainImageName           = req.file.mainimage.name;
+        var mainImageMime           = req.file.mainimage.mimetype;
+        var mainImagePath           = req.file.mainimage.path;
+        var mainImageExt            = req.file.mainimage.extension;
+        var mainImageSize           = req.file.mainimage.size;
+    } else{
+        var mainImageName = 'noimage.png';
+    }
 
 	// Form Validation
 	req.checkBody('title', "Title field is require").notEmpty();
@@ -40,7 +40,7 @@ router.post('/add', function(req, res, next) {
 	var errors = req.validationErrors();
 
 	if (errors) {
-		req.render('addpost', {
+		res.render('addpost', {
 			"errors": errors,
 			"title": title,
 			"body": body
@@ -55,14 +55,14 @@ router.post('/add', function(req, res, next) {
 			"category": category,
 			"date": date,
 			"author": author,
-			"mainimage": mainimage
+			"mainimage": mainImageName
 		}, function(err, post) {
 			if (err) {
-				res.send('There is an issue submitting the post')
+				res.send('There is an issue submitting the post');
 			} else {
 				req.flash('success', "Post Submitted");
 				req.location('/');
-				req.redirect("/")
+				req.redirect("/");
 			}
 		});
 	}
