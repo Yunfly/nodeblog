@@ -1,0 +1,29 @@
+extends layout
+
+block content
+	h1=title
+	ul.errors
+		if errors
+			each error, i in errors
+				li.alert.alert.danger #{error.msg}
+	form(action="/posts/add", method='post', enctype='multipart/form-data')
+		.form-group
+			label Title:
+			input.form-control(type="text", name='title')
+		.form-group
+			label Category:
+			select.form-control(name='category')
+				each category, i in categories
+					option(value='#{category.title}') #{category.title};
+		.form-group
+			label Body:
+			textarea.form-control(id="body", name='body')
+		.form-group
+			label Main Image:
+			input.form-control(type="file", name='mainimage')
+		.form-group
+			label Author
+			select.form-control(name='author')
+				option(value="Qinfeiyun") Qinfeiyun
+				option(value="Yunfei") Yunfei
+		input.btn.btn-default(name='submit',type='submit',value='save')
