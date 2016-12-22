@@ -13,22 +13,30 @@ var flash = require('connect-flash');
 
 var routes = require('./routes/index');
 var posts = require('./routes/posts');
+var categories = require('./routes/categories');
 
 var app = express();
 
 app.locals.moment = require('moment');
 
+// 控制首页文字字数
+app.locals.truncateText = function(text,length){
+  var truncateText = text.substring(0,length);
+  return truncateText;
+}
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+// Handle File Uploads & Multipart Data
 app.use(multer({ dest: './public/images/uploads'}).single('mainimage'));
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 //Handle express Sessions
@@ -73,6 +81,8 @@ app.use(function(req,res,next){
 
 app.use('/', routes);
 app.use('/posts', posts);
+app.use('/categories', categories);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -2,14 +2,16 @@ extends layout
 
 block content
 	if posts
-		each post, i in posts
-			.post
-				h1
-					a(href='/posts/show/#{post._id}')
-						=post.title
-				p.meta Posted in #{post.category} by #{post.auther} on #{moment(post.date).format("YYYY-MM-DD")}
-				=post.body
-				br
-				a.more(href="posts/show/#{post._id}") Read More
+	each post, i in posts
+		.post
+			h1
+				a(href='/posts/show/#{post._id}')
+					=post.title
+			p.meta Posted in
+				a(href="/categories/show/#{post.category}") #{post.category} by #{post.auther} on #{moment(post.date).format("YYYY-MM-DD")}
+			img(src="/images/uploads/#{post.mainimage}", alt="")
+			!=truncateText(post.body,400)
+			br
+			a.more(href="posts/show/#{post._id}") Read More
 	else
 		p.noposts There is no posts
